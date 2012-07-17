@@ -3,7 +3,7 @@ Contributors: Jayce53
 Tags: Rich Snippet, Google Rich Snippet Test Tool, Recipe rich snippet, product rich snippet, review rich snippet
 Requires at least: 3.2
 Tested up to: 3.4.1
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2 or later
 
 Test Rich Snippet markup on all pages and see Google's preview. For all rich snippet markup: recipes, reviews, products, people, music and more 
@@ -47,5 +47,5 @@ Requires PHP 5+
 3. A sample of the results
 
 == Changelog ==
-= 1.0 =
+= 1.1 =
 * First release

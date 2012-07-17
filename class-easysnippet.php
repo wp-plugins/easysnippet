@@ -30,7 +30,7 @@ class EasySnippet {
     private $pluginsURL;
     private $pluginsDIR;
     private $thisPluginDIR;
-    private $version = '1.0';
+    private $version = '1.1';
     
     function __construct() {
         
