@@ -4,13 +4,13 @@ Plugin Name: EasySnippet
 Plugin URI: http://www.easy-plugins.com/
 Description: Run a site-wide Google Rich Snippet Test
 Author: Jayce53
-Version: 1.1
+Version: 2.0.0099
 Author URI: http://www.easy-plugins.com/
 License: GPLv2 or later
 */
 
-/*
 
+/**
 Copyright (c) 2010-2012 Box Hill LLC
 
 This program is free software; you can redistribute it and/or
@@ -28,39 +28,55 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
+
 if (!function_exists('add_action')) {
     echo "Hi there!  I'm just a plugin, not much I can do when called directly.";
     exit();
 }
 
-if (!function_exists('easysnippetPHP5')) {
-    function easysnippetPHP5() {
-        wp_die("Rich Snippet requires PHP 5+.  Your server is running PHP" . phpversion() . '<br /><a href="/wp-admin/plugins.php">Go back</a>');
+
+if (!class_exists('EasySnippet', false)) {
+
+    /**
+     * We only need load on admin pages and ajax requests that are specifically for us
+     */
+    global $pagenow;
+    if (isset($pagenow)) {
+        if ($pagenow == 'admin-ajax.php') {
+            $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+            if (stripos($action, 'easysnippet') === false) {
+                return;
+            }
+        } else if (!is_admin()) {
+            return;
+        }
     }
-}
 
-if (phpversion() < '5') {
-    register_activation_hook(__FILE__, "easysnippetPHP5");
-    return;
-}
-
-/*
- * Ignore anything we don't care about
- */
-if ($GLOBALS["pagenow"] == "admin-ajax.php") {
-    if (!isset($_REQUEST["action"]) || ($_REQUEST["action"] != "snippettest" && $_REQUEST["action"] != "snippetget")) {
+    if (phpversion() < '5') {
+        if (!function_exists('EasySnippetPHP5')) {
+            function EasySnippetPHP5() {
+                wp_die("This plugin requires PHP 5+.  Your server is running PHP" . phpversion() . '<br /><a href="/wp-admin/plugins.php">Go back</a>');
+            }
+        }
+        register_activation_hook(__FILE__, "EasySnippetPHP5");
         return;
     }
+
+    /**
+     * Autoload any of this plugin's classes
+     *
+     * @param $class
+     */
+    function EasySnippetAutoload($class) {
+        if (strpos($class, 'EasySnippet') === 0) {
+            /** @noinspection PhpIncludeInspection */
+            @include (dirname(__FILE__) . "/lib/$class.php");
+        }
+    }
+
+    spl_autoload_register("EasySnippetAutoload");
+
+    $EasySnippet = new EasySnippet(dirname(__FILE__), WP_PLUGIN_URL . "/easysnippet");
 }
 
-/*
-* Instantiate the class IF we're in admin and it doesn't already exist
-*/
-
-if (is_admin() && !class_exists('EasySnippetSnippet', false)) {
-    require_once 'class-easysnippet.php';
-    $easysnippet = new EasySnippet();
-    register_activation_hook(__FILE__, array ($easysnippet, "easysnippetActivated"));
-    register_deactivation_hook(__FILE__, array ($easysnippet, "easysnippetDeactivated"));
-}
-?>
