@@ -25,7 +25,7 @@ class EasySnippet {
     public static $EasySnippetDir;
     public static $EasySnippetURL;
 
-    private $myVersion = '2.0.0099';
+    private $myVersion = '2.0.0105';
 
     private $pluginDir;
     private $pluginURL;

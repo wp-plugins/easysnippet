@@ -4,7 +4,7 @@ Plugin Name: EasySnippet
 Plugin URI: http://www.easy-plugins.com/
 Description: Run a site-wide Google Rich Snippet Test
 Author: Jayce53
-Version: 2.0.0099
+Version: 2.0.0105
 Author URI: http://www.easy-plugins.com/
 License: GPLv2 or later
 */
